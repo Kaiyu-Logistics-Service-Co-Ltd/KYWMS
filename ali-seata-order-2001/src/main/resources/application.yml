@@ -1,5 +1,5 @@
 server:
-  port: 2001
+  port: 45550
 
 spring:
   application:
@@ -14,10 +14,12 @@ spring:
       discovery:
         #server-addr: cluster.local:80
         server-addr: 219.135.168.199:8848
+#        ip: 120.24.195.77
     sentinel:
       transport:
         #配置sentinel的仪表盘地址
         dashboard: 219.135.168.199:9527
+        clientIp: 127.0.0.1
         port: 8719
       datasource:
         ds1:

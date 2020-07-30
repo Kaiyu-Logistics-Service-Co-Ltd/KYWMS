@@ -11,6 +11,9 @@
         <module>ali-seata-order-2001</module>
         <module>ali-seata-storage-2002</module>
         <module>ali-seata-account-2003</module>
+        <module>user</module>
+        <module>dirdemo</module>
+        <module>api-commons</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,12 +55,17 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!--==============糊涂工具包======= -->
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.3.5</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
+        <!--==============糊涂工具包======= -->
+<!--        <dependency>-->
+<!--            <groupId>cn.hutool</groupId>-->
+<!--            <artifactId>hutool-all</artifactId>-->
+<!--            <version>5.3.5</version>-->
+<!--        </dependency>-->
     </dependencies>
     <!-- 子模块继承之后，提供作用：锁定版本+子modlue不用写groupId和version  -->
     <dependencyManagement>

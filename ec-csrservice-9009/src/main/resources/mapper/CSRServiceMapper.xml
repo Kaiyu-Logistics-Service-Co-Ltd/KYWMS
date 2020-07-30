@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.ec.dao.CSRServiceDao">
+    <resultMap id="MessageBaseResultMap" type="org.example.ec.entities.Message">
+        <id column="msgId" property="msgId" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="createBy" property="createBy" jdbcType="BIGINT"/>
+        <result column="createdDate" property="createdDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ServiceListBaseResultMap" type="org.example.ec.entities.ServiceList">
+        <id column="serviceId" property="serviceId" jdbcType="BIGINT"  />
+        <result column="tableName" property="tableName" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="BIGINT"/>
+        <result column="waiterId" property="waiterId" jdbcType="BIGINT"/>
+        <result column="createdDate" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="serviceStatus" property="serviceStatus" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="UserBaseResultMap" type="org.example.ec.entities.User">
+        <id column="userId" property="userId" jdbcType="BIGINT"  />
+        <result column="userCode" property="userCode" jdbcType="VARCHAR"/>
+        <result column="userPassword" property="userPassword" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="userBalance" property="userBalance" jdbcType="DECIMAL"/>
+        <result column="createBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="createdDate" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="modifyBy" property="modifyBy" jdbcType="VARCHAR"/>
+        <result column="modifyDate" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
+        <result column="role" property="role" jdbcType="INTEGER"/>
+        <result column="userStatus" property="userStatus" jdbcType="INTEGER"/>
+        <result column="userCart" property="userCart" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--  创建信息表  -->
+    <insert id="createTableByPrimaryKey" parameterType="java.lang.String">
+        CREATE TABLE ${tableName} (
+          msgId bigint(10) NOT NULL AUTO_INCREMENT COMMENT '聊天信息ID（系统默认自动递增，不可修改）',
+          content varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+          createdBy bigint(10) NOT NULL COMMENT '用户ID（该条聊天信息由谁发出）',
+          createdDate datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期（自动更新）',
+          PRIMARY KEY (msgId) USING BTREE
+        ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+    </insert>
+    <!--  删除信息表===>预留  -->
+    <delete id="dropTableByPrimaryKey" parameterType="java.lang.String">
+        DROP TABLE IF EXISTS ${tableName};
+    </delete>
+    <!--  更新服务状态为结束状态==>0  -->
+    <update id="updateCSRService" parameterType="java.lang.Long">
+        UPDATE ServiceList SET serviceStatus = 0 WHERE serviceId = #{serviceId,jdbcType=BIGINT};
+    </update>
+    <!--  插入服务列表  -->
+    <insert id="insertNewService" parameterType="org.example.ec.entities.ServiceList">
+        INSERT INTO ServiceList
+        (tableName, userId, waiterId)
+        VALUES (
+            #{tableName,jdbcType=VARCHAR},
+            #{userId,jdbcType=BIGINT},
+            #{waiterId,jdbcType=BIGINT}
+        );
+    </insert>
+    <!--  查询目前活动的对话  -->
+    <select id="selectMsgTable" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT tableName
+        FROM `ServiceList`
+        WHERE serviceId = #{serviceId,jdbcType=BIGINT} AND serviceStatus!=0;
+    </select>
+    <!--  查询目前对话内容  -->
+    <select id="selectMsg" parameterType="java.lang.String" resultMap="MessageBaseResultMap">
+        SELECT * FROM ${tableName};
+    </select>
+    <!--  插入信息到对话  -->
+    <insert id="sendAMsgToDialog" parameterType="map">
+        INSERT INTO
+        ${params.msgTable}(content,createdBy)
+        VALUES(#{params.msg.content,jdbcType=VARCHAR},#{params.msg.createdBy,jdbcType=BIGINT});
+    </insert>
+
+    <!--  ###以下为操作用户模块的User表###  -->
+    <!--  释放客服状态如果存在  -->
+    <update id="releaseWaiterService" parameterType="java.lang.Long">
+         UPDATE User
+         SET serviceId = 0,userStatus = 1
+         WHERE serviceId = #{serviceId,jdbcType=BIGINT} AND userStatus = 2 AND role = 7;
+    </update>
+    <!--  获取静态用户9527暂时代替Session  -->
+    <select id="selectStaticKeyUserId" parameterType="java.lang.Long" resultMap="UserBaseResultMap">
+        SELECT * FROM User WHERE userId = #{userId};
+    </select>
+    <!--  查询一位空闲客服的ID  -->
+    <select id="selectIdleWaiterId" resultType="java.lang.Long">
+        SELECT userId FROM
+        User WHERE role = 7 AND userStatus = 1
+        ORDER BY userId
+        <if test="orderBy==1 ">
+            DESC
+        </if>
+        <if test="orderBy==0 ">
+            ASC
+        </if>
+        LIMIT 1 ;
+    </select>
+    <!--  更新空闲客服状态与服务编号 -->
+    <update id="updateWaiterServiceOperation" parameterType="java.lang.Long">
+        <selectKey resultType="java.lang.Long" keyProperty="serviceId" order="BEFORE">
+            SELECT serviceId FROM ServiceList
+            WHERE waiterId = #{waiterId,jdbcType=BIGINT} AND serviceStatus = 1;
+        </selectKey>
+        UPDATE User
+        SET
+        serviceId = #{serviceId,jdbcType=BIGINT},
+        userStatus = 2
+        WHERE userId = #{waiterId,jdbcType=BIGINT};
+    </update>
+    <!--  更新用户的服务编号  -->
+    <update id="updateUserServiceOperation" parameterType="java.lang.Long">
+        <selectKey resultType="java.lang.Long" keyProperty="serviceId" order="BEFORE">
+            SELECT serviceId FROM ServiceList
+            WHERE userId = #{userId,jdbcType=BIGINT} AND serviceStatus = 1;
+        </selectKey>
+        UPDATE User
+        SET serviceId = #{serviceId,jdbcType=BIGINT}
+        WHERE userId = #{userId,jdbcType=BIGINT};
+    </update>
+
+</mapper>

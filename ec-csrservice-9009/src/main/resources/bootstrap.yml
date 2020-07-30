@@ -1,0 +1,20 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: ec-csrservice
+  cloud:
+    alibaba:
+      seata:
+        tx-service-group: ec_group #统一事务组
+    #注册进nacos
+    nacos:
+      discovery:
+        server-addr: 120.77.158.242:80 #注册中心地址
+      config:
+        enabled: true
+        timeout: 10000
+        server-addr: 120.77.158.242:80 #Nacos配置注册中心地址
+        file-extension: yaml #指定yaml格式的配置
+#        namespace: b11788be-ea61-4840-8584-8bedf9efd60e
+#        group: LEARN_GROUP
