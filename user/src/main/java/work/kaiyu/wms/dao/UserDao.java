@@ -7,6 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface UserDao {
-    List<User> queryAllUser();
+    List<User> queryUserForSimple();
     List<User> queryAllUserForDetail();
 }

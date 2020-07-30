@@ -45,17 +45,17 @@
             <result column="modifyDate" jdbcType="TIMESTAMP" property="modifyDate" />
         </association>
     </resultMap>
-    <select id="queryAllUser" resultMap="BaseResultMap">
-        select * from User
+    <select id="queryUserForSimple" resultMap="BaseResultMap">
+        select * from `user`
     </select>
     <select id="queryAllUserForDetail" resultMap="WithDetailResultMap">
-        SELECT
-            u.userCode,
-            u.userName,
-            userMobile,
-            u.userEmail,
-            c.companyName,
-            u_dd.valueName
+        SELECT *
+--             u.userCode,
+--             u.userName,
+--             userMobile,
+--             u.userEmail,
+--             c.companyName,
+--             u_dd.valueName
         FROM
             `user` AS u
             LEFT JOIN `company` AS c ON u.companyId = c.companyId
