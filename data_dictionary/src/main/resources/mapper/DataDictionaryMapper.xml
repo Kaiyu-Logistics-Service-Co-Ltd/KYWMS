@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.kaiyu.wms.dao.DataDictionaryDao">
+    <resultMap id="BaseResultMap" type="work.kaiyu.wms.domain.DataDictionary">
+        <id column="dataId" jdbcType="BIGINT" property="dataId" />
+        <result column="typeCode" jdbcType="VARCHAR" property="typeCode" />
+        <result column="typeName" jdbcType="VARCHAR" property="typeName" />
+        <result column="valueId" jdbcType="INTEGER" property="valueId" />
+        <result column="valueName" jdbcType="VARCHAR" property="valueName" />
+        <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
+        <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate" />
+        <result column="modifyBy" jdbcType="BIGINT" property="modifyBy" />
+        <result column="modifyDate" jdbcType="TIMESTAMP" property="modifyDate" />
+    </resultMap>
+    <select id="queryAllDataDictionaryForSimple" resultMap="BaseResultMap">
+        SELECT * FROM `data_dictionary`
+    </select>
+    <select id="queryAllDataDictionaryWithRequirement" resultMap="BaseResultMap">
+        SELECT * FROM `data_dictionary` WHERE typeCode = #{typeCode} AND valueId = #{valueId}
+    </select>
+</mapper>

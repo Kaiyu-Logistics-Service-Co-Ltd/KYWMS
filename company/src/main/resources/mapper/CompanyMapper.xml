@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.kaiyu.wms.dao.CompanyDao">
+    <resultMap id="BaseResultMap" type="work.kaiyu.wms.domain.Company">
+        <id column="companyId" jdbcType="BIGINT" property="companyId" />
+        <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        companyId,companyName
+    </sql>
+    <select id="queryAllCompanyForSimple" resultMap="BaseResultMap">
+        SELECT * FROM `company`
+    </select>
+    <select id="queryCompanyWithPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM `company` WHERE companyId = #{companyId}
+    </select>
+    <insert id="insertCompany" parameterType="work.kaiyu.wms.domain.Company">
+        INSERT INTO company(<include refid="Base_Column_List"/>)VALUES (companyId,#{companyName});
+    </insert>
+</mapper>

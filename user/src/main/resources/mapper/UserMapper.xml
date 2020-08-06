@@ -8,8 +8,8 @@
         <result column="userName" jdbcType="VARCHAR" property="userName" />
         <result column="userMobile" jdbcType="VARCHAR" property="userMobile" />
         <result column="userEmail" jdbcType="VARCHAR" property="userEmail" />
-        <result column="companyId" jdbcType="BIGINT" property="companyId" />
-        <result column="userType" jdbcType="INTEGER" property="userType" />
+        <result column="departmentId" jdbcType="BIGINT" property="departmentId" />
+        <result column="userRoleId" jdbcType="BIGINT" property="userRoleId" />
         <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
         <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate" />
         <result column="modifyBy" jdbcType="BIGINT" property="modifyBy" />
@@ -22,89 +22,110 @@
         <result column="userName" jdbcType="VARCHAR" property="userName" />
         <result column="userMobile" jdbcType="VARCHAR" property="userMobile" />
         <result column="userEmail" jdbcType="VARCHAR" property="userEmail" />
-        <result column="companyId" jdbcType="BIGINT" property="companyId" />
-        <result column="userType" jdbcType="INTEGER" property="userType" />
+        <result column="departmentId" jdbcType="BIGINT" property="departmentId" />
+        <result column="userRoleId" jdbcType="BIGINT" property="userRoleId" />
         <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
         <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate" />
         <result column="modifyBy" jdbcType="BIGINT" property="modifyBy" />
         <result column="modifyDate" jdbcType="TIMESTAMP" property="modifyDate" />
         <!--指定联合查询出的书籍分类字段 -->
-        <association property="company" javaType="work.kaiyu.wms.domain.Company">
-            <id column="companyId" jdbcType="BIGINT" property="companyId" />
-            <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+        <association property="department" javaType="work.kaiyu.wms.domain.Department">
+            <id column="departmentId" jdbcType="BIGINT" property="departmentId" />
+            <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+            <result column="departmentManager" jdbcType="BIGINT" property="departmentManager" />
         </association>
-        <association property="dataDictionary" javaType="work.kaiyu.wms.domain.DataDictionary">
-            <id column="dataId" jdbcType="BIGINT" property="dataId" />
-            <result column="typeCode" jdbcType="VARCHAR" property="typeCode" />
-            <result column="typeName" jdbcType="VARCHAR" property="typeName" />
-            <result column="valueId" jdbcType="INTEGER" property="valueId" />
-            <result column="valueName" jdbcType="VARCHAR" property="valueName" />
+        <association property="userRole" javaType="work.kaiyu.wms.domain.UserRole">
+            <id column="userRoleId" jdbcType="BIGINT" property="userRoleId" />
+            <result column="userRoleName" jdbcType="VARCHAR" property="userRoleName" />
+            <result column="userRoleAuthority" jdbcType="BIGINT" property="userRoleAuthority" />
             <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
             <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate" />
             <result column="modifyBy" jdbcType="BIGINT" property="modifyBy" />
             <result column="modifyDate" jdbcType="TIMESTAMP" property="modifyDate" />
         </association>
     </resultMap>
-    <select id="queryUserForSimple" resultMap="BaseResultMap">
-        select * from `user`
+    <!--用户完整字段    -->
+    <sql id="Base_Column_List">
+        userId,userCode,userPassword,userName,userMobile,userEmail,departmentId,userRoleId, createdBy, creationDate, modifyBy, modifyDate
+    </sql>
+    <!--用户简单字段  -->
+    <sql id="Simple_Column_List">
+        userId,userCode,userPassword,userName,userMobile,userEmail,departmentId,userRoleId
+    </sql>
+    <!--用户简单字段除了密码    -->
+    <sql id="Simple_Column_List_WithOut_PASSWORD">
+        userId,userCode,userName,userMobile,userEmail,departmentId,userRoleId
+    </sql>
+    <!--用户连表基础信息字段    -->
+    <sql id="With_SimpleDetail_Column_List">
+        u.userCode,u.userName,u.userMobile,d.departmentName,u_r.userRoleName
+    </sql>
+    <sql id="With_Detail_Column_List">
+        u.userCode,
+        u.userPassword,
+        u.userName,
+        u.userMobile,
+        u.userEmail,
+        d.departmentId,
+        d.departmentName,
+        u_r.userRoleId,
+        u_r.userRoleName,
+        u_r.userRoleAuthority
+    </sql>
+    <!--用户插入字段    -->
+    <sql id="Insert_Column_List">
+        userCode,userPassword,userName,departmentId,userRoleId,createdBy
+    </sql>
+    <!--    -->
+    <select id="queryAllUserForSimple" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `user`
     </select>
-    <select id="queryAllUserForDetail" resultMap="WithDetailResultMap">
-        SELECT *
---             u.userCode,
---             u.userName,
---             userMobile,
---             u.userEmail,
---             c.companyName,
---             u_dd.valueName
+    <!--    -->
+    <select id="queryAllUserForSimpleDetail" resultMap="WithDetailResultMap">
+        SELECT <include refid="With_SimpleDetail_Column_List"/>
         FROM
             `user` AS u
-            LEFT JOIN `company` AS c ON u.companyId = c.companyId
-            LEFT JOIN ( SELECT valueId, valueName FROM `data_dictionary` WHERE typeCode = "USER_TYPE" ) AS u_dd ON u.userType = u_dd.valueId
+            LEFT JOIN ( SELECT departmentId, departmentName FROM `department` ) AS d ON u.departmentId = d.departmentId
+            LEFT JOIN ( SELECT userRoleId, userRoleName FROM `user_role` ) AS u_r ON u.userRoleId = u_r.userRoleId
+        ORDER BY
+            u.userId
+    </select>
+    <!--    -->
+    <select id="queryAllUserForDetail" resultMap="WithDetailResultMap">
+        SELECT <include refid="With_Detail_Column_List"/>
+        FROM `user` AS u
+        LEFT JOIN ( SELECT departmentId, departmentName FROM `department` ) AS d ON u.departmentId = d.departmentId
+        LEFT JOIN ( SELECT userRoleId, userRoleName,userRoleAuthority FROM `user_role` ) AS u_r ON u.userRoleId = u_r.userRoleId
         ORDER BY u.userId
     </select>
+    <!--用户登录信息检查    -->
+    <select id="checkUserLoginByUserCode" parameterType="java.lang.String" resultMap="WithDetailResultMap">
+        SELECT <include refid="With_Detail_Column_List"/>
+        FROM
+            (
+                SELECT <include refid="Simple_Column_List"/>
+                FROM `user` WHERE userCode = #{userCode} AND userPassword = #{userPassword}
+            ) AS u
+        LEFT JOIN ( SELECT departmentId, departmentName FROM `department` ) AS d ON u.departmentId = d.departmentId
+        LEFT JOIN ( SELECT userRoleId, userRoleName, userRoleAuthority FROM `user_role` ) AS u_r ON u.userRoleId = u_r.userRoleId
+    </select>
 
-<!--    <insert id="insert" keyColumn="userId" keyProperty="userId" parameterType="org.example.ec.entities.UserInfo" useGeneratedKeys="true">-->
-<!--        insert into User (userCode, userPassword, userName)-->
-<!--        values (#{userCode,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR});-->
-<!--    </insert>-->
+    <!--检查用户是否存在    -->
+    <select id="checkUserIsExisted" parameterType="java.lang.String" resultType="java.lang.Long" >
+        SELECT userId
+        FROM `user`
+        WHERE userCode=#{userCode}
+    </select>
 
-<!--    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
-<!--        delete from User-->
-<!--        where userId = #{userId,jdbcType=BIGINT}-->
-<!--    </delete>-->
-
-<!--    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="org.example.ec.entities.UserInfo">-->
-<!--        select * from User-->
-<!--        where userId = #{userId,jdbcType=BIGINT}-->
-<!--    </select>-->
-
-<!--    <select id="selectByUserCode" parameterType="java.lang.String" resultType="org.example.ec.entities.UserInfo">-->
-<!--        select * from User-->
-<!--        where userCode = #{userCode,jdbcType=BIGINT}-->
-<!--    </select>-->
-
-<!--    <update id="updateByPrimaryKey" parameterType="org.example.ec.entities.UserInfo">-->
-<!--        update User-->
-<!--        <trim prefix="set" suffixOverrides=",">-->
-<!--            <if test="userName!=null">-->
-<!--                userName = #{userName},-->
-<!--            </if>-->
-<!--            <if test="userPassword!=null">-->
-<!--                userPassword = #{userPassword},-->
-<!--            </if>-->
-<!--        </trim>-->
-<!--        where userId = #{userId,jdbcType=BIGINT}-->
-<!--    </update>-->
-
-<!--    <update id="updateUserStatus" parameterType="org.example.ec.entities.UserInfo">-->
-<!--        update User set-->
-<!--           userStatus = 2-->
-<!--        where userId = #{userId,jdbcType=BIGINT}-->
-<!--    </update>-->
-
-<!--    <update id="payByUserId" parameterType="org.example.ec.entities.UserInfo">-->
-<!--        update User set-->
-<!--            userBalance = userBalance - #{price}-->
-<!--        where userId = #{userId,jdbcType=BIGINT}-->
-<!--    </update>-->
+    <insert id="insertUser" parameterType="work.kaiyu.wms.domain.User">
+        INSERT INTO user(<include refid="Insert_Column_List"/>)
+        VALUES (
+        #{userCode},
+        #{userPassword},
+        #{userName},
+        #{departmentId},
+        #{userRoleId},
+        #{createdBy});
+    </insert>
 </mapper>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>user</artifactId>
+    <artifactId>company</artifactId>
     <dependencies>
         <!-- Nacos注册中心服务发现    -->
         <dependency>
@@ -91,7 +91,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>work.kaiyu.wms.UserMain10001</mainClass>
+                    <mainClass>work.kaiyu.wms.CompanyMain10011</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>
