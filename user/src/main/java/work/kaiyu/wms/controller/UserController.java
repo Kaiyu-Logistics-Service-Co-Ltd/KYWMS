@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-public class TestController {
+public class UserController {
     @Resource
     private UserService userService;
 
@@ -52,18 +52,42 @@ public class TestController {
             return new CommonResult(500,"Error!");
         }
     }
+    @GetMapping("/checkIfTheUserCodeExists")
+    public CommonResult checkIfTheUserCodeExists(@RequestParam String userCode){
+        try{
+            Integer checkFlage = userService.checkIfTheUserCodeExists(userCode);
+            if (checkFlage==0){
+                log.info("==================>用户名可用");
+                return new CommonResult(200,"用户名可用");
+            }else return new CommonResult(204,"用户名已被使用");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error!");
+        }
+    }
     @PostMapping(value = "/addUser")
     public CommonResult addUser(@RequestBody User user,
-                                 HttpSession session){
+                                HttpSession session){
         try{
             User currentUser = (User) session.getAttribute("currentUser");
-
-            Integer regFlag = userService.regUser(user,0L);
-            if (regFlag == 1){
-                return new CommonResult(200,"注册成功!");
-
-            }else{
-                return new CommonResult(401,"注册失败!");
+            if (currentUser!=null){
+                if (user!=null){
+                    Integer addFlag = userService.addUser(user,currentUser);
+                    if (addFlag==1){
+                        return new CommonResult(200,"添加用户成功!");
+                    }else if (addFlag==401){
+                        return new CommonResult(addFlag,"无可用角色!");
+                    }else if (addFlag==402){
+                        return new CommonResult(addFlag,"用户名重复!");
+                    }else {
+                        return new CommonResult(204,"添加用户失败!");
+                    }
+                }
+                else{
+                    return new CommonResult(205,"输入信息有误!");
+                }
+            }else {
+                return new CommonResult(401,"请登录!");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -91,16 +115,33 @@ public class TestController {
     public CommonResult<User> removeSession(HttpSession session,
                                          HttpServletRequest request) {
         try {
-            session.removeAttribute("currentUser");
             User sessionUser = (User) session.getAttribute("currentUser");
             if (ObjectUtil.isNull(sessionUser)) {
-                return new CommonResult(200, "登出成功");
+                return new CommonResult(404, "未登录");
             } else {
-                return new CommonResult(401, "登出失败",sessionUser);
+                session.removeAttribute("currentUser");
+                User checkUser = (User) session.getAttribute("currentUser");
+                if (ObjectUtil.isNull(checkUser)) {
+                    return new CommonResult(200, "登出成功");
+                } else {
+                    return new CommonResult(401, "登出失败",checkUser);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             return new CommonResult(500, "Error");
+        }
+    }
+    @PostMapping("/userPasswordEncryption")
+    public CommonResult userPasswordEncryption(@RequestParam String userPassword){
+        String cipherText = AESEncrypt.AESEncode(userPassword);
+        /**
+         * 判断加密是否成功
+         */
+        if (cipherText.equals("")||cipherText==null){
+            return new CommonResult(204, "加密失败");
+        }else {
+            return new CommonResult(200, "加密成功",cipherText);
         }
     }
 }

@@ -61,6 +61,7 @@
         u.userCode,u.userName,u.userMobile,d.departmentName,u_r.userRoleName
     </sql>
     <sql id="With_Detail_Column_List">
+        u.userId,
         u.userCode,
         u.userPassword,
         u.userName,
@@ -112,7 +113,7 @@
     </select>
 
     <!--检查用户是否存在    -->
-    <select id="checkUserIsExisted" parameterType="java.lang.String" resultType="java.lang.Long" >
+    <select id="checkIfTheUserCodeExists" parameterType="java.lang.String" resultType="java.lang.Long" >
         SELECT userId
         FROM `user`
         WHERE userCode=#{userCode}

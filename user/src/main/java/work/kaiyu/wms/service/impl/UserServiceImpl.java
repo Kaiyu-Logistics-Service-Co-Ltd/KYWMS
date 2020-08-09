@@ -9,7 +9,6 @@ import work.kaiyu.wms.service.UserService;
 import work.kaiyu.wms.utils.AESEncrypt;
 
 import javax.annotation.Resource;
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -47,23 +46,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer checkIfTheUserCodeExists(String userCode) {
+        Long userId = userDao.checkIfTheUserCodeExists(userCode);
+        if (userId==null){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
+    @Override
     @GlobalTransactional
-    public Integer regUser(User user,Long createBy) {
+    public Integer addUser(User addUser, User currentUser) {
         try{
-            Integer regFlag = 0;
-            user.setUserPassword(AESEncrypt.AESEncode(user.getUserPassword()));
-            /**
-             * 判断加密是否成功
-             */
-            if (user.getUserPassword().equals("")||user.getUserPassword()==null){
-                return regFlag;
+            Integer addFlag = 0;
+            if (addUser.getUserRoleId()==0){
+                addFlag=401;
+            }else if (checkIfTheUserCodeExists(addUser.getUserCode())==0){
+                addUser.setCreatedBy(currentUser.getUserId());
+                addUser.setUserPassword(AESEncrypt.AESEncode(addUser.getUserPassword()));
+                /**
+                 * 判断加密是否成功
+                 */
+                if (addUser.getUserPassword().equals("")||addUser.getUserPassword()==null){
+                    addFlag=0;
+                }else {
+                    addFlag = userDao.insertUser(addUser);
+                }
             }else {
-                regFlag = userDao.insertUser(user);
-                return regFlag;
+                addFlag=402;
             }
+            return addFlag;
         }catch (Exception e){
             e.printStackTrace();
-            return 0;
+            return 500;
         }
     }
 

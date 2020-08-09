@@ -1,6 +1,5 @@
 package work.kaiyu.wms.service;
 
-import org.apache.ibatis.annotations.Param;
 import work.kaiyu.wms.domain.User;
 
 import java.util.List;
@@ -14,5 +13,6 @@ public interface UserService {
 
     User checkUserLogin(String record,String userPassword,Integer loginType);
 
-    Integer regUser(User user,Long createBy);
+    Integer addUser(User addUser, User currentUser);
+    Integer checkIfTheUserCodeExists(String userCode);
 }

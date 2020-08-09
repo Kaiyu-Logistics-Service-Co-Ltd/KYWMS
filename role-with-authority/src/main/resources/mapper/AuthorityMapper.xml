@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.kaiyu.wms.dao.AuthorityDao">
+    <resultMap id="BaseResultMap" type="work.kaiyu.wms.domain.Authority">
+        <id column="authorityId" jdbcType="BIGINT" property="authorityId" />
+        <result column="authorityCode" jdbcType="VARCHAR" property="authorityCode" />
+        <result column="queryWaybill" jdbcType="TINYINT" property="queryWaybill" />
+        <result column="insertWaybill" jdbcType="TINYINT" property="insertWaybill" />
+        <result column="deleteWaybill" jdbcType="TINYINT" property="deleteWaybill" />
+        <result column="updateWaybill" jdbcType="TINYINT" property="updateWaybill" />
+        <result column="queryAllocateVehicles" jdbcType="TINYINT" property="queryAllocateVehicles" />
+        <result column="insertAllocateVehicles" jdbcType="TINYINT" property="insertAllocateVehicles" />
+        <result column="deleteAllocateVehicles" jdbcType="TINYINT" property="deleteAllocateVehicles" />
+        <result column="updateAllocateVehicles" jdbcType="TINYINT" property="updateAllocateVehicles" />
+        <result column="queryFinance" jdbcType="TINYINT" property="queryFinance" />
+        <result column="insertFinance" jdbcType="TINYINT" property="insertFinance" />
+        <result column="deleteFinance" jdbcType="TINYINT" property="deleteFinance" />
+        <result column="updateFinance" jdbcType="TINYINT" property="updateFinance" />
+        <result column="queryCustomer" jdbcType="TINYINT" property="queryCustomer" />
+        <result column="insertCustomer" jdbcType="TINYINT" property="insertCustomer" />
+        <result column="deleteCustomer" jdbcType="TINYINT" property="deleteCustomer" />
+        <result column="updateCustomer" jdbcType="TINYINT" property="updateCustomer" />
+        <result column="queryAuthority" jdbcType="TINYINT" property="queryAuthority" />
+        <result column="insertAuthority" jdbcType="TINYINT" property="insertAuthority" />
+        <result column="deleteAuthority" jdbcType="TINYINT" property="deleteAuthority" />
+        <result column="updateAuthority" jdbcType="TINYINT" property="updateAuthority" />
+        <result column="queryUser" jdbcType="TINYINT" property="queryUser" />
+        <result column="insertUser" jdbcType="TINYINT" property="insertUser" />
+        <result column="deleteUser" jdbcType="TINYINT" property="deleteUser" />
+        <result column="updateUser" jdbcType="TINYINT" property="updateUser" />
+        <result column="queryNetWaybill" jdbcType="TINYINT" property="queryNetWaybill" />
+        <result column="insertNetWaybill" jdbcType="TINYINT" property="insertNetWaybill" />
+        <result column="deleteNetWaybill" jdbcType="TINYINT" property="deleteNetWaybill" />
+        <result column="updateNetWaybill" jdbcType="TINYINT" property="updateNetWaybill" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    authorityId,authorityCode, queryWaybill, insertWaybill, deleteWaybill, updateWaybill, queryAllocateVehicles,
+    insertAllocateVehicles, deleteAllocateVehicles, updateAllocateVehicles, queryFinance,
+    insertFinance, deleteFinance, updateFinance, queryCustomer, insertCustomer, deleteCustomer,
+    updateCustomer, queryAuthority, insertAuthority, deleteAuthority, updateAuthority,
+    queryUser, insertUser, deleteUser, updateUser, queryNetWaybill, insertNetWaybill,
+    deleteNetWaybill, updateNetWaybill
+  </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user_authority
+        where authorityId = #{authorityId,jdbcType=BIGINT}
+    </select>
+    <select id="selectByAuthorityCode" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT authorityId FROM user_authority WHERE authorityCode = #{authorityCode}
+    </select>
+    <insert id="insertSelective" parameterType="work.kaiyu.wms.domain.Authority">
+        insert into user_authority
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                authorityCode,
+            <if test="queryWaybill != null">
+                queryWaybill,
+            </if>
+            <if test="insertWaybill != null">
+                insertWaybill,
+            </if>
+            <if test="deleteWaybill != null">
+                deleteWaybill,
+            </if>
+            <if test="updateWaybill != null">
+                updateWaybill,
+            </if>
+            <if test="queryAllocateVehicles != null">
+                queryAllocateVehicles,
+            </if>
+            <if test="insertAllocateVehicles != null">
+                insertAllocateVehicles,
+            </if>
+            <if test="deleteAllocateVehicles != null">
+                deleteAllocateVehicles,
+            </if>
+            <if test="updateAllocateVehicles != null">
+                updateAllocateVehicles,
+            </if>
+            <if test="queryFinance != null">
+                queryFinance,
+            </if>
+            <if test="insertFinance != null">
+                insertFinance,
+            </if>
+            <if test="deleteFinance != null">
+                deleteFinance,
+            </if>
+            <if test="updateFinance != null">
+                updateFinance,
+            </if>
+            <if test="queryCustomer != null">
+                queryCustomer,
+            </if>
+            <if test="insertCustomer != null">
+                insertCustomer,
+            </if>
+            <if test="deleteCustomer != null">
+                deleteCustomer,
+            </if>
+            <if test="updateCustomer != null">
+                updateCustomer,
+            </if>
+            <if test="queryAuthority != null">
+                queryAuthority,
+            </if>
+            <if test="insertAuthority != null">
+                insertAuthority,
+            </if>
+            <if test="deleteAuthority != null">
+                deleteAuthority,
+            </if>
+            <if test="updateAuthority != null">
+                updateAuthority,
+            </if>
+            <if test="queryUser != null">
+                queryUser,
+            </if>
+            <if test="insertUser != null">
+                insertUser,
+            </if>
+            <if test="deleteUser != null">
+                deleteUser,
+            </if>
+            <if test="updateUser != null">
+                updateUser,
+            </if>
+            <if test="queryNetWaybill != null">
+                queryNetWaybill,
+            </if>
+            <if test="insertNetWaybill != null">
+                insertNetWaybill,
+            </if>
+            <if test="deleteNetWaybill != null">
+                deleteNetWaybill,
+            </if>
+            <if test="updateNetWaybill != null">
+                updateNetWaybill,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                #{authorityCode,jdbcType=VARCHAR},
+            <if test="queryWaybill != null">
+                #{queryWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="insertWaybill != null">
+                #{insertWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="deleteWaybill != null">
+                #{deleteWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="updateWaybill != null">
+                #{updateWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="queryAllocateVehicles != null">
+                #{queryAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="insertAllocateVehicles != null">
+                #{insertAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="deleteAllocateVehicles != null">
+                #{deleteAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="updateAllocateVehicles != null">
+                #{updateAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="queryFinance != null">
+                #{queryFinance,jdbcType=TINYINT},
+            </if>
+            <if test="insertFinance != null">
+                #{insertFinance,jdbcType=TINYINT},
+            </if>
+            <if test="deleteFinance != null">
+                #{deleteFinance,jdbcType=TINYINT},
+            </if>
+            <if test="updateFinance != null">
+                #{updateFinance,jdbcType=TINYINT},
+            </if>
+            <if test="queryCustomer != null">
+                #{queryCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="insertCustomer != null">
+                #{insertCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="deleteCustomer != null">
+                #{deleteCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="updateCustomer != null">
+                #{updateCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="queryAuthority != null">
+                #{queryAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="insertAuthority != null">
+                #{insertAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="deleteAuthority != null">
+                #{deleteAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="updateAuthority != null">
+                #{updateAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="queryUser != null">
+                #{queryUser,jdbcType=TINYINT},
+            </if>
+            <if test="insertUser != null">
+                #{insertUser,jdbcType=TINYINT},
+            </if>
+            <if test="deleteUser != null">
+                #{deleteUser,jdbcType=TINYINT},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=TINYINT},
+            </if>
+            <if test="queryNetWaybill != null">
+                #{queryNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="insertNetWaybill != null">
+                #{insertNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="deleteNetWaybill != null">
+                #{deleteNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="updateNetWaybill != null">
+                #{updateNetWaybill,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from user_authority
+        where authorityId = #{authorityId,jdbcType=BIGINT}
+    </delete>
+    <update id="updateByPrimaryKeySelective" parameterType="work.kaiyu.wms.domain.Authority">
+        update user_authority
+        <set>
+            <if test="queryWaybill != null">
+                queryWaybill = #{queryWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="insertWaybill != null">
+                insertWaybill = #{insertWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="deleteWaybill != null">
+                deleteWaybill = #{deleteWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="updateWaybill != null">
+                updateWaybill = #{updateWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="queryAllocateVehicles != null">
+                queryAllocateVehicles = #{queryAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="insertAllocateVehicles != null">
+                insertAllocateVehicles = #{insertAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="deleteAllocateVehicles != null">
+                deleteAllocateVehicles = #{deleteAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="updateAllocateVehicles != null">
+                updateAllocateVehicles = #{updateAllocateVehicles,jdbcType=TINYINT},
+            </if>
+            <if test="queryFinance != null">
+                queryFinance = #{queryFinance,jdbcType=TINYINT},
+            </if>
+            <if test="insertFinance != null">
+                insertFinance = #{insertFinance,jdbcType=TINYINT},
+            </if>
+            <if test="deleteFinance != null">
+                deleteFinance = #{deleteFinance,jdbcType=TINYINT},
+            </if>
+            <if test="updateFinance != null">
+                updateFinance = #{updateFinance,jdbcType=TINYINT},
+            </if>
+            <if test="queryCustomer != null">
+                queryCustomer = #{queryCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="insertCustomer != null">
+                insertCustomer = #{insertCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="deleteCustomer != null">
+                deleteCustomer = #{deleteCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="updateCustomer != null">
+                updateCustomer = #{updateCustomer,jdbcType=TINYINT},
+            </if>
+            <if test="queryAuthority != null">
+                queryAuthority = #{queryAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="insertAuthority != null">
+                insertAuthority = #{insertAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="deleteAuthority != null">
+                deleteAuthority = #{deleteAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="updateAuthority != null">
+                updateAuthority = #{updateAuthority,jdbcType=TINYINT},
+            </if>
+            <if test="queryUser != null">
+                queryUser = #{queryUser,jdbcType=TINYINT},
+            </if>
+            <if test="insertUser != null">
+                insertUser = #{insertUser,jdbcType=TINYINT},
+            </if>
+            <if test="deleteUser != null">
+                deleteUser = #{deleteUser,jdbcType=TINYINT},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser,jdbcType=TINYINT},
+            </if>
+            <if test="queryNetWaybill != null">
+                queryNetWaybill = #{queryNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="insertNetWaybill != null">
+                insertNetWaybill = #{insertNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="deleteNetWaybill != null">
+                deleteNetWaybill = #{deleteNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="updateNetWaybill != null">
+                updateNetWaybill = #{updateNetWaybill,jdbcType=TINYINT},
+            </if>
+        </set>
+        where authorityId = #{authorityId,jdbcType=BIGINT}
+    </update>
+</mapper>

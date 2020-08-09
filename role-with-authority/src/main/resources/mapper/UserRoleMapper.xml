@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.kaiyu.wms.dao.UserRoleDao">
+    <resultMap id="BaseResultMap" type="work.kaiyu.wms.domain.UserRole">
+        <id column="userRoleId" jdbcType="BIGINT" property="userRoleId" />
+        <result column="userRoleName" jdbcType="VARCHAR" property="userRoleName" />
+        <result column="userRoleAuthority" jdbcType="BIGINT" property="userRoleAuthority" />
+        <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
+        <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate" />
+        <result column="modifyBy" jdbcType="BIGINT" property="modifyBy" />
+        <result column="modifyDate" jdbcType="TIMESTAMP" property="modifyDate" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        userRoleId, userRoleName, userRoleAuthority, createdBy, creationDate, modifyBy, modifyDate
+    </sql>
+    <sql id="Simple_Column_List">
+        userRoleId, userRoleName, createdBy
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user_role
+        where userRoleId = #{userRoleId,jdbcType=BIGINT}
+    </select>
+    <select id="selectSimpleRoles" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Simple_Column_List"/>
+        FROM user_role
+        <if test="createdBy != null">
+            WHERE createdBy = #{createdBy}
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_role
+    where userRoleId = #{userRoleId,jdbcType=BIGINT}
+  </delete>
+    <insert id="insertSelective" parameterType="work.kaiyu.wms.domain.UserRole">
+        insert into user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userRoleName != null">
+                userRoleName,
+            </if>
+            <if test="userRoleAuthority != null">
+                userRoleAuthority,
+            </if>
+            <if test="createdBy != null">
+                createdBy,
+            </if>
+            <if test="creationDate != null">
+                creationDate,
+            </if>
+            <if test="modifyBy != null">
+                modifyBy,
+            </if>
+            <if test="modifyDate != null">
+                modifyDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userRoleName != null">
+                #{userRoleName,jdbcType=VARCHAR},
+            </if>
+            <if test="userRoleAuthority != null">
+                #{userRoleAuthority,jdbcType=BIGINT},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=BIGINT},
+            </if>
+            <if test="creationDate != null">
+                #{creationDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyBy != null">
+                #{modifyBy,jdbcType=BIGINT},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="work.kaiyu.wms.domain.UserRole">
+        update user_role
+        <set>
+            <if test="userRoleName != null">
+                userRoleName = #{userRoleName,jdbcType=VARCHAR},
+            </if>
+            <if test="userRoleAuthority != null">
+                userRoleAuthority = #{userRoleAuthority,jdbcType=BIGINT},
+            </if>
+            <if test="createdBy != null">
+                createdBy = #{createdBy,jdbcType=BIGINT},
+            </if>
+            <if test="creationDate != null">
+                creationDate = #{creationDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyBy != null">
+                modifyBy = #{modifyBy,jdbcType=BIGINT},
+            </if>
+            <if test="modifyDate != null">
+                modifyDate = #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where userRoleId = #{userRoleId,jdbcType=BIGINT}
+    </update>
+    <!--DepartmentMapper    -->
+    <resultMap id="DepartmentBaseResultMap" type="work.kaiyu.wms.domain.Department">
+        <id column="departmentId" property="departmentId" jdbcType="BIGINT"/>
+        <result column="departmentName" property="departmentName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="selectSimpleDepartments" resultMap="DepartmentBaseResultMap">
+        SELECT departmentId,departmentName FROM department
+    </select>
+</mapper>

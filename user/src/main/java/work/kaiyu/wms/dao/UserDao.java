@@ -25,7 +25,7 @@ public interface UserDao {
      * @param userCode
      * @return
      */
-    Long checkUserIsExisted(@Param("userCode")String userCode);
+    Long checkIfTheUserCodeExists(@Param("userCode")String userCode);
 
     /**
      * 插入用户
