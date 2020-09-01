@@ -20,7 +20,7 @@ public class RoleWithAuthorityContorller {
     private RoleWithAuthorityService roleWithAuthorityService;
 
     @GetMapping("/viewUserRoleWithAuthority")
-    public CommonResult viewUserRoleWithAuthority(){
+    public CommonResult<RoleAndAuthority> viewUserRoleWithAuthority(){
         try {
             final RoleAndAuthority roleAndAuthority = roleWithAuthorityService.selectCurrentUserRAByPrimaryKey();
             if (roleAndAuthority != null){

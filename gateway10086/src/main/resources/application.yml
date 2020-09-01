@@ -21,6 +21,14 @@ spring:
           uri: lb://wms-role-with-authority
           predicates:
             - Path=/rwa/**
+        - id: route_resource
+          uri: lb://wms-resource
+          predicates:
+            - Path=/resource/**
+        - id: route_cargo
+          uri: lb://wms-cargo
+          predicates:
+            - Path=/cargo/**
 
 #openFeign配置
 feign:

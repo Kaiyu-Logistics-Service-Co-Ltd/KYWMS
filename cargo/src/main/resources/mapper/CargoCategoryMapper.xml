@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.kaiyu.wms.dao.CargoCategoryDao">
+    <resultMap id="BaseResultMap" type="work.kaiyu.wms.domain.CargoCategory">
+        <id column="cargoCategoryId" jdbcType="BIGINT" property="cargoCategoryId" />
+        <result column="cargoCategoryCode" jdbcType="VARCHAR" property="cargoCategoryCode" />
+        <result column="cargoCategoryName" jdbcType="VARCHAR" property="cargoCategoryName" />
+        <result column="cargoCategoryParentId" jdbcType="BIGINT" property="cargoCategoryParentId" />
+        <result column="cargoCategoryCreatedBy" jdbcType="BIGINT" property="cargoCategoryCreatedBy" />
+        <result column="cargoCategoryCreationDate" jdbcType="TIMESTAMP" property="cargoCategoryCreationDate" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        cargoCategoryId,cargoCategoryCode,cargoCategoryName,cargoCategoryParentId,cargoCategoryCreatedBy,cargoCategoryCreationDate
+    </sql>
+    <sql id="Simple_Column_List">
+        cargoCategoryId,cargoCategoryCode,cargoCategoryName,cargoCategoryParentId
+    </sql>
+    <select id="getCargoCategoryListByParentId" resultMap="BaseResultMap">
+        select <include refid="Simple_Column_List"/>
+        from cargo_category
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="cargoCategoryParentId != null">
+                and cargoCategoryParentId = #{cargoCategoryParentId}
+            </if>
+            <!--父级id不为空，代表查询指定id-->
+            <if test="cargoCategoryParentId == null">
+                and cargoCategoryParentId is null
+            </if>
+            <!--父级id为空，代表查询所有-->
+        </trim>
+    </select>
+    <insert id="addCargoCategory" parameterType="work.kaiyu.wms.domain.CargoCategory">
+        INSERT INTO
+        cargo_category(cargoCategoryName,cargoCategoryParentId,cargoCategoryCreatedBy)
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                #{cargoCategoryName,jdbcType=VARCHAR},
+            <if test="cargoCategoryParentId != null" >
+                #{cargoCategoryParentId,jdbcType=BIGINT},
+            </if>
+            <if test="cargoCategoryParentId == null" >
+                0,
+            </if>
+                #{cargoCategoryCreatedBy,jdbcType=BIGINT},
+        </trim>
+    </insert>
+    <update id="updateCargoCategory" parameterType="work.kaiyu.wms.domain.CargoCategory">
+        UPDATE cargo_category
+        <set>
+            <if test="cargoCategoryName != null">
+                cargoCategoryName = #{cargoCategoryName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where cargoCategoryId = #{cargoCategoryId,jdbcType=BIGINT}
+    </update>
+    <delete id="deleteCargoCategory" parameterType="java.lang.Long">
+        DELETE FROM cargo_category WHERE cargoCategoryId = #{cargoCategoryId,jdbcType=BIGINT}
+    </delete>
+</mapper>

@@ -32,6 +32,10 @@
         <result column="insertNetWaybill" jdbcType="TINYINT" property="insertNetWaybill" />
         <result column="deleteNetWaybill" jdbcType="TINYINT" property="deleteNetWaybill" />
         <result column="updateNetWaybill" jdbcType="TINYINT" property="updateNetWaybill" />
+        <result column="queryCargoCategory" jdbcType="TINYINT" property="queryCargoCategory" />
+        <result column="insertCargoCategory" jdbcType="TINYINT" property="insertCargoCategory" />
+        <result column="deleteCargoCategory" jdbcType="TINYINT" property="deleteCargoCategory" />
+        <result column="updateCargoCategory" jdbcType="TINYINT" property="updateCargoCategory" />
     </resultMap>
     <sql id="Base_Column_List">
     authorityId,authorityCode, queryWaybill, insertWaybill, deleteWaybill, updateWaybill, queryAllocateVehicles,
@@ -39,7 +43,7 @@
     insertFinance, deleteFinance, updateFinance, queryCustomer, insertCustomer, deleteCustomer,
     updateCustomer, queryAuthority, insertAuthority, deleteAuthority, updateAuthority,
     queryUser, insertUser, deleteUser, updateUser, queryNetWaybill, insertNetWaybill,
-    deleteNetWaybill, updateNetWaybill
+    deleteNetWaybill, updateNetWaybill,queryCargoCategory,insertCargoCategory,deleteCargoCategory,updateCargoCategory,queryCargo,insertCargo,deleteCargo,updateCargo
   </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -139,6 +143,30 @@
             <if test="updateNetWaybill != null">
                 updateNetWaybill,
             </if>
+            <if test="queryCargoCategory != null">
+                queryCargoCategory,
+            </if>
+            <if test="insertCargoCategory != null">
+                insertCargoCategory,
+            </if>
+            <if test="deleteCargoCategory != null">
+                deleteCargoCategory,
+            </if>
+            <if test="updateCargoCategory != null">
+                updateCargoCategory,
+            </if>
+            <if test="queryCargo != null">
+                queryCargo,
+            </if>
+            <if test="insertCargo != null">
+                insertCargo,
+            </if>
+            <if test="deleteCargo != null">
+                deleteCargo,
+            </if>
+            <if test="updateCargo != null">
+                updateCargo,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                 #{authorityCode,jdbcType=VARCHAR},
@@ -225,6 +253,18 @@
             </if>
             <if test="updateNetWaybill != null">
                 #{updateNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="queryCargo != null">
+                #{queryCargo,jdbcType=TINYINT},
+            </if>
+            <if test="insertCargo != null">
+                #{insertCargo,jdbcType=TINYINT},
+            </if>
+            <if test="deleteCargo != null">
+                #{deleteCargo,jdbcType=TINYINT},
+            </if>
+            <if test="updateCargo != null">
+                #{updateCargo,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -318,6 +358,30 @@
             </if>
             <if test="updateNetWaybill != null">
                 updateNetWaybill = #{updateNetWaybill,jdbcType=TINYINT},
+            </if>
+            <if test="queryCargoCategory != null">
+                queryCargoCategory = #{queryCargoCategory,jdbcType=TINYINT},
+            </if>
+            <if test="insertCargoCategory != null">
+                insertCargoCategory = #{insertCargoCategory,jdbcType=TINYINT},
+            </if>
+            <if test="deleteCargoCategory != null">
+                deleteCargoCategory = #{deleteCargoCategory,jdbcType=TINYINT},
+            </if>
+            <if test="updateCargoCategory != null">
+                updateCargoCategory = #{updateCargoCategory,jdbcType=TINYINT},
+            </if>
+            <if test="queryCargo != null">
+                queryCargo = #{queryCargo,jdbcType=TINYINT},
+            </if>
+            <if test="insertCargo != null">
+                insertCargo = #{insertCargo,jdbcType=TINYINT},
+            </if>
+            <if test="deleteCargo != null">
+                deleteCargo = #{deleteCargo,jdbcType=TINYINT},
+            </if>
+            <if test="updateCargo != null">
+                updateCargo = #{updateCargo,jdbcType=TINYINT},
             </if>
         </set>
         where authorityId = #{authorityId,jdbcType=BIGINT}
