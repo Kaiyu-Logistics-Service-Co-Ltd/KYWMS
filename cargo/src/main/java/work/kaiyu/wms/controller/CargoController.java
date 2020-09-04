@@ -10,7 +10,6 @@ import work.kaiyu.wms.service.CargoCategoryService;
 import work.kaiyu.wms.service.CargoManagementService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Slf4j
 @RestController

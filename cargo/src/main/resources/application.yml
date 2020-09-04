@@ -45,11 +45,6 @@ spring:
 #配置mapper文件
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  page:
-    helperDialect: mysql
-    countSql: true
-    reasonable: true
-    pageSizeZero: false
 
 #openFeign配置
 #openFeign配置
@@ -81,3 +76,5 @@ management:
     web:
       exposure:
         include: '*'
+pagehelper:
+  reasonable: true
