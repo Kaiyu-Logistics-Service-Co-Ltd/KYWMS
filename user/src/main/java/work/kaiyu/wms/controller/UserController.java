@@ -30,6 +30,15 @@ public class UserController {
             return new CommonResult(500,"Error!");
         }
     }
+    @GetMapping("/ping")
+    public CommonResult ping(){
+        try {
+            return new CommonResult(200,"PONG!");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error!");
+        }
+    }
 
     @PostMapping(value = "/login")
     public CommonResult login(@RequestBody User user,
