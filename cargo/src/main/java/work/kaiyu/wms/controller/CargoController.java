@@ -23,7 +23,7 @@ public class CargoController {
     private CargoManagementService cargoManagementService;
 
     /**
-     * 获取分类列表
+     * 获取分类列表(带分页)
      * @param cargoCategoryParentId
      * @return
      */
@@ -36,6 +36,15 @@ public class CargoController {
             //封装了详细的分页信息，包括有我们查询出来的数据,传入连续显示的页数
             PageInfo page = new PageInfo(cargoCategoryService.getCargoCategoryListByParentId(cargoCategoryParentId),5);
             return new CommonResult(200,"获取分类成功",page);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error");
+        }
+    }
+    @GetMapping("/getFirstCategory")
+    public CommonResult getFirstCategory() {
+        try{
+            return new CommonResult(200,"获取分类成功",cargoCategoryService.getCargoCategoryListByParentId(0L));
         }catch (Exception e){
             e.printStackTrace();
             return new CommonResult(500,"Error");
