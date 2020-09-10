@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import sun.font.TrueTypeFont;
 import work.kaiyu.wms.domain.CargoCategory;
 import work.kaiyu.wms.domain.CommonResult;
 import work.kaiyu.wms.service.CargoCategoryService;
@@ -53,22 +54,10 @@ public class CargoController {
     @PostMapping("/addCategory")
     public CommonResult addCategory(@RequestBody CargoCategory cargoCategory) {
         try{
+            cargoCategory.setCargoCategoryId(null);
             Integer addFlag = cargoCategoryService.addCargoCategory(cargoCategory);
-            if (addFlag==200){
-                return new CommonResult(200,"添加分类成功");
-            }else if (addFlag==205){
-                return new CommonResult(addFlag,"添加分类失败");
-            }else if (addFlag==300){
-                return new CommonResult(addFlag,"用户权限不足");
-            }else if (addFlag==400){
-                return new CommonResult(addFlag,"获取当前用户权限失败");
-            }else if (addFlag==404){
-                return new CommonResult(addFlag,"获取当前用户权限失败");
-            }else if (addFlag==403){
-                return new CommonResult(addFlag,"请登录");
-            }else {
-                return new CommonResult(504,"未知问题");
-            }
+            return returnType(false,addFlag,"增加分类");
+
         }catch (Exception e){
             e.printStackTrace();
             return new CommonResult(500,"Error");
@@ -101,24 +90,47 @@ public class CargoController {
     public CommonResult updateCategory(@RequestBody CargoCategory cargoCategory) {
         try{
             Integer updateFlag = cargoCategoryService.updateCargoCategory(cargoCategory);
-            if (updateFlag==200){
-                return new CommonResult(200,"修改分类成功");
-            }else if (updateFlag==205){
-                return new CommonResult(updateFlag,"修改分类失败");
-            }else if (updateFlag==300){
-                return new CommonResult(updateFlag,"用户权限不足");
-            }else if (updateFlag==400){
-                return new CommonResult(updateFlag,"获取当前用户权限失败");
-            }else if (updateFlag==404){
-                return new CommonResult(updateFlag,"获取当前用户权限失败");
-            }else if (updateFlag==403){
-                return new CommonResult(updateFlag,"请登录");
-            }else {
-                return new CommonResult(504,"未知问题");
-            }
+            return returnType(false,updateFlag,"修改分类");
         }catch (Exception e){
             e.printStackTrace();
             return new CommonResult(500,"Error");
         }
+    }
+
+    /**
+     * 返回编码抽取
+     * @param type 是否自定义消息
+     * @param flag 错误编码
+     * @param spliceMsg 拼接字符串
+     * @param data 数据 nullable
+     * @return
+     */
+    private CommonResult returnType(Boolean type, Integer flag, String spliceMsg, Object data){
+        if (type){
+            if (data==null){
+                return new CommonResult(flag,spliceMsg);
+            }else {
+                return new CommonResult(flag,spliceMsg,data);
+            }
+        }else {
+            if (flag==200){
+                return new CommonResult(flag,spliceMsg+"成功");
+            }else if (flag==205){
+                return new CommonResult(flag,spliceMsg+"失败");
+            }else if (flag==300){
+                return new CommonResult(flag,"用户权限不足");
+            }else if (flag==400){
+                return new CommonResult(flag,"获取当前用户权限失败");
+            }else if (flag==404){
+                return new CommonResult(flag,"获取当前用户权限失败");
+            }else if (flag==403){
+                return new CommonResult(flag,"请登录");
+            }else {
+                return new CommonResult(504,"未知问题");
+            }
+        }
+    }
+    private CommonResult returnType(Boolean type, Integer flag, String spliceMsg){
+        return returnType(type, flag, spliceMsg,null);
     }
 }

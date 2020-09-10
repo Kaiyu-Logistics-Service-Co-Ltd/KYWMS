@@ -24,4 +24,8 @@ public class User {
     private Date modifyDate;
     private Department department;
     private UserRole userRole;
+
+    public User(Long userId) {
+        this(userId,null,null,null,null,null,null,null,null,null,null,null,null,null);
+    }
 }
