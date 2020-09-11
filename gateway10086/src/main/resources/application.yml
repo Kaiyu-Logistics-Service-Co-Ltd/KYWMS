@@ -24,7 +24,7 @@ spring:
         - id: route_resource
           uri: lb://wms-resource
           predicates:
-            - Path=/resource/**
+            - Path=/resources/**,/resource/**
         - id: route_cargo
           uri: lb://wms-cargo
           predicates:

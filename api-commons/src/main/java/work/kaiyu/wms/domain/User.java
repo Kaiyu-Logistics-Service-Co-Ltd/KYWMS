@@ -1,12 +1,12 @@
 package work.kaiyu.wms.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -16,6 +16,7 @@ public class User {
     private String userName;
     private String userMobile;
     private String userEmail;
+    private String resourceCode;
     private Long departmentId;
     private Long userRoleId;
     private Long createdBy;
@@ -25,7 +26,4 @@ public class User {
     private Department department;
     private UserRole userRole;
 
-    public User(Long userId) {
-        this(userId,null,null,null,null,null,null,null,null,null,null,null,null,null);
-    }
 }
