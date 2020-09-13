@@ -9,8 +9,8 @@ public class ResourceConfig  implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**")
+                .addResourceLocations("file:C:/Users/cssly/OneDrive/resources/")
                 .addResourceLocations("file:F:/resources/")
-                .addResourceLocations("file:C:/resources/")
                 .addResourceLocations("classpath:/static/")
                 .addResourceLocations("classpath:/public/")
                 .addResourceLocations("classpath:/resources/");
