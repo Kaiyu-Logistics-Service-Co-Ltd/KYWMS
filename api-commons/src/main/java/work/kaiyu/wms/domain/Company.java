@@ -1,10 +1,14 @@
 package work.kaiyu.wms.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Company {

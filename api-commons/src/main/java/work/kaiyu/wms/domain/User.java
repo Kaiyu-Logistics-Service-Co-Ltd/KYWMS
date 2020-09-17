@@ -1,14 +1,18 @@
 package work.kaiyu.wms.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     private Long userId;
     private String userCode;

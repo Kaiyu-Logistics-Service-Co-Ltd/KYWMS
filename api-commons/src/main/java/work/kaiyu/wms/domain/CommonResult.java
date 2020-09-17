@@ -1,7 +1,9 @@
 package work.kaiyu.wms.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.NoArgsConstructor;
 
 /**
@@ -9,7 +11,10 @@ import lombok.NoArgsConstructor;
  * Date: 2020/5/31
  * Time: 17:15
  */
-@Data
+
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommonResult<T>{
