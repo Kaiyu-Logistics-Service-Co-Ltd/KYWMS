@@ -132,4 +132,18 @@
         #{userRoleId},
         #{createdBy});
     </insert>
+    <update id="updateUserInfo" parameterType="work.kaiyu.wms.domain.User">
+        UPDATE user
+        <set>
+            <trim suffixOverrides=",">
+                <if test="userName != null">
+                    userName = #{userName,jdbcType=VARCHAR},
+                </if>
+                <if test="userMobile != null">
+                    userMobile = #{userMobile,jdbcType=VARCHAR},
+                </if>
+            </trim>
+        </set>
+        WHERE userId = #{userId,jdbcType=BIGINT}
+    </update>
 </mapper>

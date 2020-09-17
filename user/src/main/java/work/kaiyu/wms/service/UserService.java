@@ -14,5 +14,6 @@ public interface UserService {
     User checkUserLogin(String record,String userPassword,Integer loginType);
 
     Integer addUser(User addUser, User currentUser);
+    Integer updateUserInfo(User updateUser,User currentUser);
     Integer checkIfTheUserCodeExists(String userCode);
 }

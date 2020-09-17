@@ -83,4 +83,23 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Integer updateUserInfo(User updateUser,User currentUser) {
+        try{
+            Integer updateFlag = 0;
+            /**
+             * 只有修改用户昵称的方式。用一个只有userName字段值的对象操作
+             */
+            User user = new User();
+            user.setUserId(currentUser.getUserId());
+            user.setUserName(updateUser.getUserName());
+            user.setUserMobile(updateUser.getUserMobile());
+            updateFlag = userDao.updateUserInfo(user);
+            return updateFlag;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 500;
+        }
+    }
+
 }

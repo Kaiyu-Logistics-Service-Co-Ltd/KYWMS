@@ -33,4 +33,12 @@ public interface UserDao {
      * @return
      */
     Integer insertUser(User user);
+
+    /**
+     * 修改用户
+     * @param user
+     * @return
+     */
+    Integer updateUserInfo(User user);
+
 }

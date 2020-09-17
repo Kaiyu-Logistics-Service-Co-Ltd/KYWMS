@@ -103,6 +103,35 @@ public class UserController {
             return new CommonResult(500,"Error!");
         }
     }
+    @PostMapping(value = "/updateUserInfo")
+    public CommonResult updateUserInfo(@RequestBody User user,
+                                HttpSession session){
+        try{
+            User currentUser = (User) session.getAttribute("currentUser");
+            if (currentUser!=null){
+                if (user!=null){
+                    Integer updateFlag = userService.updateUserInfo(user,currentUser);
+                    if (updateFlag ==1){
+                        return new CommonResult(200,"修改用户成功!");
+                    }else if (updateFlag ==401){
+                        return new CommonResult(updateFlag,"无可用角色!");
+                    }else if (updateFlag ==402){
+                        return new CommonResult(updateFlag,"用户名重复!");
+                    }else {
+                        return new CommonResult(204,"修改用户失败!");
+                    }
+                }
+                else{
+                    return new CommonResult(205,"输入信息有误!");
+                }
+            }else {
+                return new CommonResult(401,"请登录!");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error!");
+        }
+    }
 
     @PostMapping("/getSession")
     public CommonResult<User> getSession(HttpSession session,
