@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.kaiyu.wms.dao.UserResourceDao">
+    <resultMap id="BaseResultMap" type="work.kaiyu.wms.domain.Resource">
+        <id property="resourceId" column="resourceId" jdbcType="BIGINT"/>
+        <result property="resourceType" column="resourceType" jdbcType="INTEGER"/>
+        <result property="resourcePath" column="resourcePath" jdbcType="VARCHAR"/>
+        <result property="resourceBy" column="resourceBy" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="BaseColumn">
+        resourceId,resourceType,resourcePath,resourceBy
+    </sql>
+    <sql id="InsertColumn">
+        resourceType,resourcePath,resourceRealPath,resourceBy
+    </sql>
+    <insert id="createResource" parameterType="work.kaiyu.wms.domain.Resource">
+        INSERT INTO user_resource(<include refid="InsertColumn"/>)
+        VALUES(#{resourceType},#{resourcePath},#{resourceRealPath},#{resourceBy});
+    </insert>
+    <update id="updateResource" parameterType="work.kaiyu.wms.domain.Resource">
+        UPDATE user_resource
+        SET resourcePath = #{resourcePath},
+            resourceRealPath = #{resourceRealPath}
+        WHERE resourceId = #{resourceId}
+    </update>
+    <delete id="deleteResource" parameterType="java.lang.Long">
+        DELETE FROM user_resource WHERE resourceId = #{resourceId}
+    </delete>
+    <select id="selectOneResource" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumn"/>
+        FROM user_resource WHERE resourceType = #{resourceType} AND resourceBy = #{resourceBy}
+    </select>
+    <select id="selectResourceList" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumn"/>
+        FROM user_resource WHERE resourceBy = #{resourceBy}
+    </select>
+</mapper>
