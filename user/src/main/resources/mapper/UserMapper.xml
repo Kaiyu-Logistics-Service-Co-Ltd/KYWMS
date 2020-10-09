@@ -8,7 +8,6 @@
         <result column="userName" jdbcType="VARCHAR" property="userName" />
         <result column="userMobile" jdbcType="VARCHAR" property="userMobile" />
         <result column="userEmail" jdbcType="VARCHAR" property="userEmail" />
-        <result column="resourceCode" jdbcType="VARCHAR" property="resourceCode" />
         <result column="departmentId" jdbcType="BIGINT" property="departmentId" />
         <result column="userRoleId" jdbcType="BIGINT" property="userRoleId" />
         <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
@@ -23,7 +22,6 @@
         <result column="userName" jdbcType="VARCHAR" property="userName" />
         <result column="userMobile" jdbcType="VARCHAR" property="userMobile" />
         <result column="userEmail" jdbcType="VARCHAR" property="userEmail" />
-        <result column="resourceCode" jdbcType="VARCHAR" property="resourceCode" />
         <result column="departmentId" jdbcType="BIGINT" property="departmentId" />
         <result column="userRoleId" jdbcType="BIGINT" property="userRoleId" />
         <result column="createdBy" jdbcType="BIGINT" property="createdBy" />
@@ -48,19 +46,19 @@
     </resultMap>
     <!--用户完整字段    -->
     <sql id="Base_Column_List">
-        userId,userCode,userPassword,userName,userMobile,userEmail,resourceCode,departmentId,userRoleId, createdBy, creationDate, modifyBy, modifyDate
+        userId,userCode,userPassword,userName,userMobile,userEmail,departmentId,userRoleId, createdBy, creationDate, modifyBy, modifyDate
     </sql>
     <!--用户简单字段  -->
     <sql id="Simple_Column_List">
-        userId,userCode,userPassword,userName,userMobile,userEmail,resourceCode,departmentId,userRoleId
+        userId,userCode,userPassword,userName,userMobile,userEmail,departmentId,userRoleId
     </sql>
     <!--用户简单字段除了密码    -->
     <sql id="Simple_Column_List_WithOut_PASSWORD">
-        userId,userCode,userName,userMobile,userEmail,resourceCode,departmentId,userRoleId
+        userId,userCode,userName,userMobile,userEmail,departmentId,userRoleId
     </sql>
     <!--用户连表基础信息字段    -->
     <sql id="With_SimpleDetail_Column_List">
-        u.userCode,u.userName,u.userMobile,u.resourceCode,d.departmentName,u_r.userRoleName
+        u.userCode,u.userName,u.userMobile,d.departmentName,u_r.userRoleName
     </sql>
     <sql id="With_Detail_Column_List">
         u.userId,
@@ -69,7 +67,6 @@
         u.userName,
         u.userMobile,
         u.userEmail,
-        u.resourceCode,
         d.departmentId,
         d.departmentName,
         u_r.userRoleId,

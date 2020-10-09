@@ -20,9 +20,9 @@ public class User {
     private String userName;
     private String userMobile;
     private String userEmail;
-    private String resourceCode;
     private Long departmentId;
     private Long userRoleId;
+    private Long resourceId;
     private Long createdBy;
     private Date creationDate;
     private Long modifyBy;

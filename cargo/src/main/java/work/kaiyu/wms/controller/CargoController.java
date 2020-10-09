@@ -5,12 +5,14 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import sun.font.TrueTypeFont;
+import work.kaiyu.wms.domain.Cargo;
 import work.kaiyu.wms.domain.CargoCategory;
 import work.kaiyu.wms.domain.CommonResult;
 import work.kaiyu.wms.service.CargoCategoryService;
 import work.kaiyu.wms.service.CargoManagementService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,9 +21,45 @@ public class CargoController {
 
     @Resource
     private CargoCategoryService cargoCategoryService;
-
     @Resource
     private CargoManagementService cargoManagementService;
+
+    /**
+     * 返回编码抽取
+     * @param type 是否自定义消息
+     * @param flag 错误编码
+     * @param spliceMsg 拼接字符串
+     * @param data 数据 nullable
+     * @return
+     */
+    private CommonResult returnType(Boolean type, Integer flag, String spliceMsg, Object data){
+        if (type){
+            if (data==null){
+                return new CommonResult(flag,spliceMsg);
+            }else {
+                return new CommonResult(flag,spliceMsg,data);
+            }
+        }else {
+            if (flag==200){
+                return new CommonResult(flag,spliceMsg+"成功");
+            }else if (flag==203){
+                return new CommonResult(flag,"未经授权");
+            }else if (flag==204){
+                return new CommonResult(flag,"服务连接失败");
+            }else if (flag==205){
+                return new CommonResult(flag,spliceMsg+"失败");
+            }else if (flag==401){
+                return new CommonResult(flag,"用户权限不足");
+            }else if (flag==403){
+                return new CommonResult(flag,"服务器禁止请求");
+            }else {
+                return new CommonResult(flag,"未知问题");
+            }
+        }
+    }
+    private CommonResult returnType(Boolean type, Integer flag, String spliceMsg){
+        return returnType(type, flag, spliceMsg,null);
+    }
 
     /**
      * 获取分类列表(带分页)
@@ -42,6 +80,10 @@ public class CargoController {
             return new CommonResult(500,"Error");
         }
     }
+    /**
+     * 获取一级分类
+     * @return
+     */
     @GetMapping("/getFirstCategory")
     public CommonResult getFirstCategory() {
         try{
@@ -51,6 +93,11 @@ public class CargoController {
             return new CommonResult(500,"Error");
         }
     }
+    /**
+     * 增加分类
+     * @param cargoCategory
+     * @return
+     */
     @PostMapping("/addCategory")
     public CommonResult addCategory(@RequestBody CargoCategory cargoCategory) {
         try{
@@ -63,29 +110,25 @@ public class CargoController {
             return new CommonResult(500,"Error");
         }
     }
+    /**
+     * 删除分类
+     * @param cargoCategoryId
+     * @return
+     */
     @PostMapping("/deleteCategory")
     public CommonResult deleteCategory(@RequestParam("cargoCategoryId") Long cargoCategoryId) {
         try{
             Integer deleteFlag = cargoCategoryService.deleteCargoCategory(cargoCategoryId);
-            if (deleteFlag==200){
-                return new CommonResult(200,"删除分类成功");
-            }else if (deleteFlag==205){
-                return new CommonResult(deleteFlag,"删除分类失败");
-            }else if (deleteFlag==300){
-                return new CommonResult(deleteFlag,"用户权限不足");
-            }else if (deleteFlag==400){
-                return new CommonResult(deleteFlag,"获取当前用户权限失败");
-            }else if (deleteFlag==404){
-                return new CommonResult(deleteFlag,"获取当前用户权限失败");
-            }else if (deleteFlag==403){
-                return new CommonResult(deleteFlag,"请登录");
-            }else {
-                return new CommonResult(504,"未知问题");
-            }
+            return returnType(false,deleteFlag,"删除分类");
         }catch (Exception e){
             return new CommonResult(500,"Error");
         }
     }
+    /**
+     * 更新分类
+     * @param cargoCategory
+     * @return
+     */
     @PostMapping("/updateCategory")
     public CommonResult updateCategory(@RequestBody CargoCategory cargoCategory) {
         try{
@@ -97,40 +140,57 @@ public class CargoController {
         }
     }
 
-    /**
-     * 返回编码抽取
-     * @param type 是否自定义消息
-     * @param flag 错误编码
-     * @param spliceMsg 拼接字符串
-     * @param data 数据 nullable
-     * @return
-     */
-    private CommonResult returnType(Boolean type, Integer flag, String spliceMsg, Object data){
-        if (type){
-            if (data==null){
-                return new CommonResult(flag,spliceMsg);
-            }else {
-                return new CommonResult(flag,spliceMsg,data);
-            }
-        }else {
-            if (flag==200){
-                return new CommonResult(flag,spliceMsg+"成功");
-            }else if (flag==205){
-                return new CommonResult(flag,spliceMsg+"失败");
-            }else if (flag==300){
-                return new CommonResult(flag,"用户权限不足");
-            }else if (flag==400){
-                return new CommonResult(flag,"获取当前用户权限失败");
-            }else if (flag==404){
-                return new CommonResult(flag,"获取当前用户权限失败");
-            }else if (flag==403){
-                return new CommonResult(flag,"请登录");
-            }else {
-                return new CommonResult(504,"未知问题");
-            }
+    @PostMapping("/addCargo")
+    public CommonResult addCargo(@RequestBody Cargo cargo){
+        try{
+            Integer flag = cargoManagementService.addCargo(cargo);
+            return returnType(false,flag,"添加货物信息");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error");
         }
     }
-    private CommonResult returnType(Boolean type, Integer flag, String spliceMsg){
-        return returnType(type, flag, spliceMsg,null);
+    @PostMapping("/deleteCargo")
+    public CommonResult deleteCargo(@RequestParam(value = "cargoId")Long cargoId){
+        try{
+            Integer flag = cargoManagementService.deleteCargo(cargoId);
+            return returnType(false,flag,"删除货物信息");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error");
+        }
     }
+    @PostMapping("/updateCargo")
+    public CommonResult updateCargo(@RequestBody Cargo cargo){
+        try{
+            Integer flag = cargoManagementService.updateCargo(cargo);
+            return returnType(false,flag,"修改货物信息");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error");
+        }
+    }
+    @GetMapping("/selectOneCargo")
+    public CommonResult selectOneCargo(@RequestParam(value = "cargoId")Long cargoId){
+        try{
+            Cargo cargo = cargoManagementService.selectOneCargo(cargoId);
+            return returnType(true,200,"查询单个货物信息",cargo);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error");
+        }
+    }
+    @GetMapping("/selectCargoList")
+    public CommonResult selectCargoList(){
+        try{
+            List<Cargo> cargoList = cargoManagementService.selectCargoList();
+            return returnType(true,200,"查询货物信息列表",cargoList);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error");
+        }
+    }
+
+
+
 }

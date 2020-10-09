@@ -150,9 +150,9 @@ public class AESEncrypt {
     }
 
     public static void main(String[] args) {
-        String str = AESEncode("123456");
-        System.out.println(str);
-        System.out.println(AESDncode(str));
+//        String str = AESEncode("4E5FD77A9C623FF41B00F8E5CE7F668B");
+//        System.out.println(str);
+        System.out.println(AESDncode("4E5FD77A9C623FF41B00F8E5CE7F668B"));
     }
 
     private static String AESEncodeBK(String encodeRules,String content){

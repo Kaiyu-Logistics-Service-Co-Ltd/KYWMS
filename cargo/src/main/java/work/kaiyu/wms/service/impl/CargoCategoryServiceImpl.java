@@ -1,6 +1,6 @@
 package work.kaiyu.wms.service.impl;
 
-import cn.hutool.core.lang.UUID;
+import cn.hutool.http.HttpStatus;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import work.kaiyu.wms.service.UserService;
 
 import javax.annotation.Resource;
 import java.util.List;
+
 
 @Slf4j
 @Service
@@ -39,12 +40,11 @@ public class CargoCategoryServiceImpl implements CargoCategoryService {
             log.info("===============================>获取当前用户权限:BEGIN");
             CommonResult<RoleAndAuthority> RACommonResult = roleWithAuthorityService.viewUserRoleWithAuthority();
             if (RACommonResult.getCode()==200){
-                RoleAndAuthority roleAndAuthority = RACommonResult.getData();
-                Authority currentAuthority = roleAndAuthority.getAuthority();
+                Authority currentAuthority = RACommonResult.getData().getAuthority();
                 /**
                  * 判断是否有对应权限
                  */
-                if (currentAuthority!=null||currentAuthority.getAuthorityId()!=0){
+                if (currentAuthority!=null&&!currentAuthority.getAuthorityId().equals(0L)){
                     /**
                      * 判断是否有修改权限
                      */
@@ -55,24 +55,24 @@ public class CargoCategoryServiceImpl implements CargoCategoryService {
                         cargoCategory.setCargoCategoryCreatedBy(currentUser.getUserId());
                         Integer addFlag = cargoCategoryDao.addCargoCategory(cargoCategory);
                         if (addFlag==1){
-                            return 200;
+                            return HttpStatus.HTTP_OK;
                         }
-                        return 205;
+                        return HttpStatus.HTTP_RESET;
                     }else{
                         log.error("================================<用户权限不足:FAIL");
-                        return 300;
+                        return HttpStatus.HTTP_UNAUTHORIZED;
                     }
                 }else{
                     log.error("================================<获取当前用户权限:FAIL");
-                    return 400;
+                    return HttpStatus.HTTP_FORBIDDEN;
                 }
             }else {
                 log.error("================================<获取当前用户权限:FAIL");
-                return 404;
+                return HttpStatus.HTTP_NO_CONTENT;
             }
         }else{
             log.error("================================<获取当前用户Session:FAIL");
-            return 403;
+            return HttpStatus.HTTP_FORBIDDEN;
         }
     }
 
@@ -89,36 +89,35 @@ public class CargoCategoryServiceImpl implements CargoCategoryService {
             log.info("===============================>获取当前用户权限:BEGIN");
             CommonResult<RoleAndAuthority> RACommonResult = roleWithAuthorityService.viewUserRoleWithAuthority();
             if (RACommonResult.getCode()==200){
-                RoleAndAuthority roleAndAuthority = RACommonResult.getData();
-                Authority currentAuthority = roleAndAuthority.getAuthority();
+                Authority currentAuthority = RACommonResult.getData().getAuthority();
                 /**
                  * 判断是否有对应权限
                  */
-                if (currentAuthority!=null||currentAuthority.getAuthorityId()!=0){
+                if (currentAuthority!=null&&!currentAuthority.getAuthorityId().equals(0L)){
                     if (currentAuthority.getDeleteCargoCategory()==true){
                         /**
                          * 数据处理
                          */
                         Integer deleteFlag = cargoCategoryDao.deleteCargoCategory(cargoCategoryId);
                         if (deleteFlag==1){
-                            return 200;
+                            return HttpStatus.HTTP_OK;
                         }
-                        return 205;
+                        return HttpStatus.HTTP_RESET;
                     }else{
                         log.error("================================<用户权限不足:FAIL");
-                        return 300;
+                        return HttpStatus.HTTP_UNAUTHORIZED;
                     }
                 }else{
                     log.error("================================<获取当前用户权限:FAIL");
-                    return 400;
+                    return HttpStatus.HTTP_FORBIDDEN;
                 }
             }else {
                 log.error("================================<获取当前用户权限:FAIL");
-                return 404;
+                return HttpStatus.HTTP_NO_CONTENT;
             }
         }else{
             log.error("================================<获取当前用户Session:FAIL");
-            return 403;
+            return HttpStatus.HTTP_FORBIDDEN;
         }
     }
 
@@ -135,36 +134,35 @@ public class CargoCategoryServiceImpl implements CargoCategoryService {
             log.info("===============================>获取当前用户权限:BEGIN");
             CommonResult<RoleAndAuthority> RACommonResult = roleWithAuthorityService.viewUserRoleWithAuthority();
             if (RACommonResult.getCode()==200){
-                RoleAndAuthority roleAndAuthority = RACommonResult.getData();
-                Authority currentAuthority = roleAndAuthority.getAuthority();
+                Authority currentAuthority = RACommonResult.getData().getAuthority();
                 /**
                  * 判断是否有对应权限
                  */
-                if (currentAuthority!=null||currentAuthority.getAuthorityId()!=0){
+                if (currentAuthority!=null&&!currentAuthority.getAuthorityId().equals(0L)){
                     if (currentAuthority.getUpdateCargoCategory()==true){
                         /**
                          * 数据处理
                          */
                         Integer updateFlag = cargoCategoryDao.updateCargoCategory(cargoCategory);
                         if (updateFlag==1){
-                            return 200;
+                            return HttpStatus.HTTP_OK;
                         }
-                        return 205;
+                        return HttpStatus.HTTP_RESET;
                     }else{
                         log.error("================================<用户权限不足:FAIL");
-                        return 300;
+                        return HttpStatus.HTTP_UNAUTHORIZED;
                     }
                 }else{
                     log.error("================================<获取当前用户权限:FAIL");
-                    return 400;
+                    return HttpStatus.HTTP_FORBIDDEN;
                 }
             }else {
                 log.error("================================<获取当前用户权限:FAIL");
-                return 404;
+                return HttpStatus.HTTP_NO_CONTENT;
             }
         }else{
             log.error("================================<获取当前用户Session:FAIL");
-            return 403;
+            return HttpStatus.HTTP_FORBIDDEN;
         }
     }
 

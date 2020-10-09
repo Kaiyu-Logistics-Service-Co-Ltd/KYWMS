@@ -15,7 +15,7 @@
         <dependency>
             <groupId>work.kaiyu</groupId>
             <artifactId>api-commons</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <!-- Nacos注册中心服务发现    -->
         <dependency>

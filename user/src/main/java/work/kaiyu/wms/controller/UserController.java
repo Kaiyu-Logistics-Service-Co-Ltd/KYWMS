@@ -61,6 +61,28 @@ public class UserController {
             return new CommonResult(500,"Error!");
         }
     }
+    @PostMapping(value = "/reLogin")
+    public CommonResult reLogin(@RequestBody User user,
+                              HttpSession session){
+        try{
+            user.setUserPassword(AESEncrypt.AESDncode(user.getUserPassword()));
+            User currentUser = userService.checkUserLogin(user.getUserCode(),user.getUserPassword(),LOGIN_TYPE);
+            if (currentUser != null){
+                if (currentUser.getUserCode().equals(user.getUserCode())&&
+                        currentUser.getUserPassword().equals(AESEncrypt.AESEncode(user.getUserPassword()))){
+                    session.setAttribute("currentUser",currentUser);
+                    return new CommonResult(200,"登录成功!",currentUser);
+                }else {
+                    return new CommonResult(401,"用户名或密码不正确!");
+                }
+            }else{
+                return new CommonResult(401,"用户名或密码不正确!");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"Error!");
+        }
+    }
     @GetMapping("/checkIfTheUserCodeExists")
     public CommonResult checkIfTheUserCodeExists(@RequestParam String userCode){
         try{
