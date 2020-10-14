@@ -9,11 +9,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>user</module>
-        <module>dirdemo</module>
         <module>api-commons</module>
         <module>gateway10086</module>
-        <module>company</module>
-        <module>data_dictionary</module>
         <module>role-with-authority</module>
         <module>resource</module>
         <module>cargo</module>
