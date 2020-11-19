@@ -12,11 +12,6 @@
     <artifactId>resource</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>work.kaiyu</groupId>
-            <artifactId>api-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- Nacos注册中心服务发现    -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -104,8 +99,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>work.kaiyu.wms.UserMain10001</mainClass>
-                    <layout>ZIP</layout>
+                    <mainClass>work.kaiyu.wms.ResourceMain10021</mainClass>
+                    <layout>JAR</layout>
                 </configuration>
                 <executions>
                     <execution>

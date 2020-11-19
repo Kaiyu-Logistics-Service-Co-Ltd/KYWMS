@@ -92,7 +92,7 @@
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
                     <mainClass>work.kaiyu.wms.RoleWithAuthorityMain10011</mainClass>
-                    <layout>ZIP</layout>
+                    <layout>JAR</layout>
                 </configuration>
                 <executions>
                     <execution>

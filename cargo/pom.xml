@@ -93,8 +93,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>work.kaiyu.wms.UserMain10001</mainClass>
-                    <layout>ZIP</layout>
+                    <mainClass>work.kaiyu.wms.CargoMain10031</mainClass>
+                    <layout>JAR</layout>
                 </configuration>
                 <executions>
                     <execution>
